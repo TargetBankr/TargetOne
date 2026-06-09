@@ -602,7 +602,8 @@ document.querySelectorAll('.reveal').forEach(el => revealObs.observe(el));
 
 // ── LOAD PRODUCTS ────────────────────────────────────────────
 async function loadProducts() {
-  const URL = `https://cdn.jsdelivr.net/gh/TargetBankr/productforwebsite@main/products.json?t=${Date.now()}`;
+  // GitHub raw URL — updates within ~5 min of push (jsDelivr caches for 24hrs)
+  const URL = `https://raw.githubusercontent.com/TargetBankr/productforwebsite/main/products.json?t=${Date.now()}`;
   try {
     const res = await fetch(URL, {cache:'no-store'});
     if (!res.ok) throw new Error('fetch failed');
@@ -1047,22 +1048,35 @@ async function pushToGitHub() {
   const repo   = document.getElementById('gh-repo').value.trim();
   const path   = document.getElementById('gh-path').value.trim();
   const branch = document.getElementById('gh-branch').value.trim();
-  if (!token) { showToast('⚠️ Enter GitHub token first'); return; }
-  showToast('⏳ Pushing to GitHub…');
+  if (!token) { showToast('Enter GitHub token first'); return; }
+  showToast('Pushing to GitHub...');
   try {
-    const sha     = await getFileSHA(token, repo, path, branch);
+    // Always fetch fresh SHA to avoid mismatch errors
+    const metaRes = await fetch(
+      `https://api.github.com/repos/${repo}/contents/${path}?ref=${branch}&t=${Date.now()}`,
+      {headers:{'Authorization':'token '+token,'Accept':'application/vnd.github.v3+json'}}
+    );
+    let sha = null;
+    if (metaRes.ok) {
+      const meta = await metaRes.json();
+      sha = meta.sha || null;
+    } else if (metaRes.status !== 404) {
+      const e = await metaRes.json();
+      showToast('SHA fetch failed: ' + (e.message || metaRes.status));
+      return;
+    }
     const payload = {products: allProducts, categories: allCategories};
     const content = btoa(unescape(encodeURIComponent(JSON.stringify(payload, null, 2))));
     const body    = {message:'Update via Target1st admin', content, branch};
     if (sha) body.sha = sha;
     const r = await fetch(`https://api.github.com/repos/${repo}/contents/${path}`, {
-      method:'PUT',
-      headers:{'Authorization':'token '+token,'Accept':'application/vnd.github.v3+json','Content-Type':'application/json'},
-      body: JSON.stringify(body)
+      method  : 'PUT',
+      headers : {'Authorization':'token '+token,'Accept':'application/vnd.github.v3+json','Content-Type':'application/json'},
+      body    : JSON.stringify(body)
     });
-    if (r.ok) showToast('✅ Pushed to GitHub!');
-    else { const e=await r.json(); showToast('❌ '+(e.message||r.status)); }
-  } catch(e) { showToast('❌ Push failed: '+e.message); }
+    if (r.ok) showToast('Pushed! Site updates in ~2 min.');
+    else { const e=await r.json(); showToast('Error: '+(e.message||r.status)); }
+  } catch(e) { showToast('Push failed: '+e.message); }
 }
 async function testGitHub() {
   const token=document.getElementById('gh-token').value.trim();
