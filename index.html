@@ -31,8 +31,9 @@ body{font-family:var(--font-body);background:var(--dark);color:var(--light);-web
 .nav-links{display:flex;align-items:center;gap:6px;}
 .nav-tab{background:none;border:1px solid transparent;color:rgba(255,255,255,0.55);font-family:var(--font-body);font-size:0.78rem;font-weight:500;padding:6px 13px;border-radius:999px;cursor:pointer;transition:all .2s;-webkit-tap-highlight-color:transparent;}
 .nav-tab:hover{color:#fff;border-color:var(--border);}
-.nav-tab.active-tab{color:#fff;border-color:rgba(255,100,50,.4);background:rgba(255,100,50,.08);}
-.nav-cta{background:linear-gradient(135deg,var(--or1),var(--or3));color:#fff !important;font-family:var(--font-body);font-size:0.8rem;font-weight:600;padding:8px 18px;border-radius:8px;border:none;cursor:pointer;transition:all .2s;-webkit-tap-highlight-color:transparent;}
+.nav-tab.active-tab:not(.nav-cta){color:#fff;border-color:rgba(255,100,50,.4);background:rgba(255,100,50,.08);}
+.nav-cta.active-tab{box-shadow:0 0 0 2px rgba(255,140,66,.5);}
+.nav-cta{background:linear-gradient(135deg,var(--or1),var(--or3));color:#fff !important;font-family:var(--font-body);font-size:0.78rem;font-weight:600;padding:7px 14px;border-radius:8px;border:none;cursor:pointer;transition:all .2s;-webkit-tap-highlight-color:transparent;white-space:nowrap;}
 .nav-cta:hover{opacity:.88;transform:translateY(-1px);}
 
 /* HERO */
@@ -80,8 +81,8 @@ h1.hero-title .grad{background:linear-gradient(90deg,var(--or1),var(--or4));-web
 .pcard:hover{transform:translateY(-4px);box-shadow:0 20px 50px rgba(0,0,0,.4);}
 .pcard.featured{border-color:rgba(255,100,50,.35);box-shadow:0 0 0 1px rgba(255,100,50,.15);}
 /* Banner — pointer-events:none on image AND overlay so nothing captures tap */
-.pcard-banner-wrap{position:relative;overflow:hidden;line-height:0;}
-.pcard-banner{width:100%;height:160px;object-fit:cover;display:block;pointer-events:none;user-select:none;-webkit-user-drag:none;}
+.pcard-banner-wrap{position:relative;overflow:hidden;line-height:0;border-radius:16px 16px 0 0;}
+.pcard-banner{width:100%;height:160px;object-fit:cover;display:block;pointer-events:none;user-select:none;-webkit-user-drag:none;border-radius:16px 16px 0 0;}
 .pcard-banner-overlay{position:absolute;inset:0;z-index:2;pointer-events:none;}
 .card-badge{position:absolute;top:12px;right:12px;z-index:3;background:linear-gradient(135deg,var(--or1),var(--or3));color:#fff;font-size:.6rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;padding:3px 10px;border-radius:999px;pointer-events:none;}
 .pcard-body{padding:20px;display:flex;flex-direction:column;flex:1;}
@@ -213,6 +214,7 @@ h1.hero-title .grad{background:linear-gradient(90deg,var(--or1),var(--or4));-web
 /* REVEAL */
 .reveal{opacity:0;transform:translateY(20px);transition:opacity .5s ease,transform .5s ease;}
 .reveal.visible{opacity:1;transform:none;}
+#product-grid.visible,#filter-bar.visible{opacity:1;transform:none;transition:none;}
 @keyframes fadeUp{from{opacity:0;transform:translateY(24px)}to{opacity:1;transform:none}}
 .a1{animation:fadeUp .6s ease both;}
 .a2{animation:fadeUp .6s .1s ease both;}
@@ -221,10 +223,78 @@ h1.hero-title .grad{background:linear-gradient(90deg,var(--or1),var(--or4));-web
 .a5{animation:fadeUp .6s .44s ease both;}
 
 @media(max-width:640px){
-  .nav-links .nav-tab:not(.nav-store-btn){display:none;}
+  .nav-links .nav-tab:not(.nav-store-btn):not(.cart-nav-btn){display:none;}
   .hero-stats{gap:24px;}
   .card-btns{grid-template-columns:1fr;}
+  .hiw-arrow{transform:rotate(90deg);}
+  .hiw-grid{grid-template-columns:1fr !important;gap:12px !important;}
+  .nav-store-text{display:none;}
+  .nav-links{gap:4px;}
 }
+
+/* CART ICON IN NAV */
+.cart-nav-btn{position:relative;background:rgba(255,255,255,.06);border:1px solid var(--border);color:rgba(255,255,255,.7);font-family:var(--font-body);font-size:.78rem;font-weight:600;padding:6px 13px 6px 10px;border-radius:999px;cursor:pointer;display:flex;align-items:center;gap:6px;transition:all .2s;-webkit-tap-highlight-color:transparent;}
+.cart-nav-btn:hover{color:#fff;border-color:rgba(255,100,50,.4);}
+.cart-count-badge{background:linear-gradient(135deg,var(--or1),var(--or3));color:#fff;font-size:.6rem;font-weight:700;min-width:16px;height:16px;border-radius:999px;display:inline-flex;align-items:center;justify-content:center;padding:0 4px;}
+
+/* CART VIEW */
+.cart-wrap{max-width:720px;margin:0 auto;padding:80px 20px 80px;}
+.cart-empty{text-align:center;padding:80px 20px;}
+.cart-empty-icon{font-size:3.5rem;margin-bottom:18px;}
+.cart-item{display:flex;align-items:center;gap:16px;background:var(--card);border:1px solid var(--border);border-radius:14px;padding:16px 20px;margin-bottom:12px;}
+.cart-item-icon{font-size:1.8rem;flex-shrink:0;}
+.cart-item-info{flex:1;}
+.cart-item-name{font-family:var(--font-head);font-size:.95rem;font-weight:700;color:#fff;margin-bottom:4px;}
+.cart-item-price{font-size:.82rem;color:var(--or3);font-weight:600;}
+.cart-item-remove{background:none;border:none;color:var(--muted);font-size:1.1rem;cursor:pointer;padding:4px;-webkit-tap-highlight-color:transparent;transition:color .2s;}
+.cart-item-remove:hover{color:#f87171;}
+.cart-summary{background:var(--dark3);border:1px solid var(--border);border-radius:14px;padding:20px 24px;margin-top:8px;}
+.cart-summary-row{display:flex;justify-content:space-between;align-items:center;font-size:.85rem;color:rgba(255,255,255,.6);margin-bottom:10px;}
+.cart-summary-row.discount{color:#6ddc7a;}
+.cart-summary-row.total{font-family:var(--font-head);font-size:1.2rem;font-weight:700;color:#fff;margin-top:12px;padding-top:12px;border-top:1px solid var(--border);margin-bottom:0;}
+.cart-discount-badge{background:rgba(109,220,122,.12);border:1px solid rgba(109,220,122,.2);border-radius:8px;padding:10px 14px;margin-bottom:16px;font-size:.8rem;color:#6ddc7a;display:none;}
+.cart-discount-badge.visible{display:block;}
+
+/* HOW IT WORKS */
+.hiw-section{max-width:1100px;margin:0 auto;padding:0 20px 80px;}
+.hiw-card{background:var(--card);border:1px solid var(--border);border-radius:20px;padding:32px 28px;display:flex;flex-direction:column;align-items:flex-start;gap:18px;transition:transform .22s,box-shadow .22s;}
+.hiw-card:hover{transform:translateY(-4px);box-shadow:0 20px 50px rgba(0,0,0,.35);}
+.hiw-illus{width:100%;height:140px;display:flex;align-items:center;justify-content:center;}
+.hiw-step-num{font-size:.62rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--or3);background:rgba(255,100,50,.1);border:1px solid rgba(255,100,50,.2);padding:3px 10px;border-radius:999px;}
+.hiw-title{font-family:var(--font-head);font-size:1.1rem;font-weight:800;color:#fff;margin-bottom:4px;}
+.hiw-desc{font-size:.82rem;color:rgba(255,255,255,.5);line-height:1.7;}
+.hiw-arrow{display:flex;align-items:center;justify-content:center;color:rgba(255,100,50,.4);font-size:1.4rem;}
+
+/* REVIEWS */
+.reviews-section{max-width:1100px;margin:0 auto;padding:0 20px 80px;}
+.review-card{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:24px;}
+.review-stars{color:#FFBA08;font-size:.9rem;letter-spacing:2px;margin-bottom:12px;}
+.review-text{font-size:.85rem;color:rgba(255,255,255,.65);line-height:1.75;margin-bottom:16px;font-style:italic;}
+.review-author{display:flex;align-items:center;gap:10px;}
+.review-avatar{width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:.85rem;font-weight:700;color:#fff;flex-shrink:0;}
+.review-name{font-size:.82rem;font-weight:600;color:#fff;}
+.review-exam{font-size:.72rem;color:var(--muted);}
+
+/* SEARCH */
+.search-wrap{position:relative;max-width:480px;margin:0 auto 28px;}
+.search-input{width:100%;background:var(--dark3);border:1px solid var(--border);color:#fff;font-family:var(--font-body);font-size:.88rem;padding:12px 16px 12px 42px;border-radius:12px;outline:none;transition:border-color .2s;}
+.search-input:focus{border-color:rgba(255,100,50,.4);}
+.search-icon{position:absolute;left:14px;top:50%;transform:translateY(-50%);color:var(--muted);pointer-events:none;}
+
+/* RECENTLY VIEWED */
+.rv-section{padding:0 20px 60px;max-width:1100px;margin:0 auto;}
+.rv-title{font-family:var(--font-head);font-size:.8rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-bottom:16px;}
+.rv-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;}
+.rv-card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:14px;cursor:pointer;transition:all .2s;-webkit-tap-highlight-color:transparent;}
+.rv-card:hover{border-color:rgba(255,100,50,.3);transform:translateY(-2px);}
+.rv-card-icon{font-size:1.3rem;margin-bottom:8px;}
+.rv-card-name{font-size:.78rem;font-weight:600;color:#fff;line-height:1.3;margin-bottom:4px;}
+.rv-card-price{font-size:.72rem;color:var(--or3);}
+@media(max-width:480px){.rv-grid{grid-template-columns:repeat(3,1fr);gap:8px;}.rv-card{padding:10px;}}
+
+/* WHATSAPP SHARE BTN */
+.wa-share-btn{display:inline-flex;align-items:center;gap:8px;background:#25D366;color:#fff;font-family:var(--font-body);font-size:.82rem;font-weight:600;padding:10px 18px;border-radius:9px;border:none;cursor:pointer;transition:all .2s;text-decoration:none;-webkit-tap-highlight-color:transparent;margin-top:12px;}
+.wa-share-btn:hover{background:#1ebe5a;transform:translateY(-1px);}
 </style>
 </head>
 <body>
@@ -235,12 +305,14 @@ h1.hero-title .grad{background:linear-gradient(90deg,var(--or1),var(--or4));-web
     <button class="logo" onclick="navigateTo('home')">Target<span>1st</span></button>
     <div class="nav-links">
       <button class="nav-tab active-tab" data-view="home"   onclick="navigateTo('home',this)">Home</button>
-      <button class="nav-tab" data-view="store"  onclick="navigateTo('store',this)">Products</button>
       <button class="nav-tab" data-view="about"  onclick="navigateTo('about',this)">About</button>
       <button class="nav-tab" data-view="terms"  onclick="navigateTo('terms',this)">Terms</button>
       <button class="nav-tab" data-view="refund" onclick="navigateTo('refund',this)">Refund</button>
       <button class="nav-tab" data-view="privacy" onclick="navigateTo('privacy',this)">Privacy</button>
-      <button class="nav-cta nav-tab nav-store-btn" onclick="navigateTo('store')">View Products →</button>
+      <button class="nav-cta nav-tab nav-store-btn" data-view="store" onclick="navigateTo('store')"><span class="nav-store-text">View </span>Products →</button>
+      <button class="cart-nav-btn" onclick="navigateTo('cart')">
+        🛒 Cart <span class="cart-count-badge" id="cart-badge">0</span>
+      </button>
     </div>
   </div>
 </nav>
@@ -253,19 +325,140 @@ h1.hero-title .grad{background:linear-gradient(90deg,var(--or1),var(--or4));-web
     <div style="position:relative;z-index:1;width:100%;max-width:680px;">
       <div class="hero-pill a1"><span class="hero-dot"></span> India's Academic Prep Store</div>
       <h1 class="hero-title a2">Study smarter.<br><span class="grad">Score higher.</span></h1>
-      <p class="hero-sub a3">High quality PDFs ,eBooks and tools designed for your academic.and competitive directly from heart .</p>
+      <p class="hero-sub a3">High-quality PDFs, eBooks and tools designed for your academic and competitive exam prep — crafted with care.</p>
       <button class="hero-btn a4" onclick="navigateTo('store')">
         Browse Products
         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
       </button>
-      <div class="hero-stats a5">
-        <div class="stat"><div class="stat-n">500+</div><div class="stat-l">Students</div></div>
-        <div class="stat"><div class="stat-n">20+</div><div class="stat-l">Products</div></div>
+      <div class="hero-stats a5" id="hero-stats">
+        <div class="stat"><div class="stat-n" id="stat-products">—</div><div class="stat-l">Products</div></div>
+        <div class="stat"><div class="stat-n" id="stat-categories">—</div><div class="stat-l">Exam Categories</div></div>
         <div class="stat"><div class="stat-n">4.8★</div><div class="stat-l">Avg Rating</div></div>
-        <div class="stat"><div class="stat-n">10+</div><div class="stat-l">Exam Categories</div></div>
+        <div class="stat"><div class="stat-n">500+</div><div class="stat-l">Students Served</div></div>
       </div>
     </div>
   </section>
+  <!-- HOW IT WORKS -->
+  <section class="hiw-section">
+    <div class="reveal" style="text-align:center;margin-bottom:40px;">
+      <div style="font-size:.68rem;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--or3);margin-bottom:12px;">Simple Process</div>
+      <h2 style="font-family:var(--font-head);font-size:clamp(1.4rem,4vw,2rem);font-weight:800;letter-spacing:-.02em;">Get your study material in <span style="background:linear-gradient(90deg,var(--or1),var(--or3));-webkit-background-clip:text;-webkit-text-fill-color:transparent;">3 steps</span></h2>
+    </div>
+    <div class="reveal hiw-grid" style="display:grid;grid-template-columns:1fr auto 1fr auto 1fr;gap:0;align-items:center;">
+      <!-- Step 1 -->
+      <div class="hiw-card">
+        <div class="hiw-illus">
+          <svg width="110" height="110" viewBox="0 0 110 110" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <rect width="110" height="110" rx="22" fill="rgba(255,69,0,0.06)"/>
+            <!-- Phone body -->
+            <rect x="33" y="18" width="44" height="74" rx="8" fill="rgba(255,255,255,0.06)" stroke="rgba(255,140,66,0.4)" stroke-width="1.5"/>
+            <!-- Screen -->
+            <rect x="38" y="26" width="34" height="52" rx="4" fill="rgba(255,69,0,0.1)"/>
+            <!-- Product card rows on screen -->
+            <rect x="41" y="30" width="28" height="8" rx="3" fill="rgba(255,140,66,0.5)"/>
+            <rect x="41" y="30" width="28" height="8" rx="3" fill="rgba(255,140,66,0.3)"/>
+            <rect x="41" y="41" width="18" height="4" rx="2" fill="rgba(255,255,255,0.2)"/>
+            <rect x="41" y="47" width="22" height="3" rx="1.5" fill="rgba(255,255,255,0.12)"/>
+            <rect x="41" y="52" width="16" height="3" rx="1.5" fill="rgba(255,255,255,0.12)"/>
+            <rect x="41" y="59" width="28" height="10" rx="3" fill="rgba(255,69,0,0.35)"/>
+            <rect x="44" y="62" width="22" height="4" rx="2" fill="rgba(255,255,255,0.3)"/>
+            <!-- Home button -->
+            <circle cx="55" cy="85" r="4" fill="rgba(255,140,66,0.25)" stroke="rgba(255,140,66,0.3)" stroke-width="1"/>
+            <!-- Glow -->
+            <circle cx="55" cy="55" r="30" fill="rgba(255,69,0,0.04)"/>
+          </svg>
+        </div>
+        <div>
+          <div class="hiw-step-num">Step 01</div>
+          <div class="hiw-title" style="margin-top:10px;">Browse & Pick</div>
+          <div class="hiw-desc">Find the exact product for your exam. Filter by category, check features, read what's inside.</div>
+        </div>
+      </div>
+      <!-- Arrow -->
+      <div class="hiw-arrow" style="padding:0 12px;">
+        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="rgba(255,100,50,0.5)" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+      </div>
+      <!-- Step 2 -->
+      <div class="hiw-card">
+        <div class="hiw-illus">
+          <svg width="110" height="110" viewBox="0 0 110 110" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <rect width="110" height="110" rx="22" fill="rgba(255,69,0,0.06)"/>
+            <!-- Payment card -->
+            <rect x="22" y="32" width="66" height="46" rx="10" fill="rgba(255,255,255,0.05)" stroke="rgba(255,140,66,0.4)" stroke-width="1.5"/>
+            <!-- Card stripe -->
+            <rect x="22" y="44" width="66" height="10" fill="rgba(255,140,66,0.15)"/>
+            <!-- Card chip -->
+            <rect x="32" y="36" width="14" height="10" rx="3" fill="rgba(255,140,66,0.35)"/>
+            <line x1="36" y1="36" x2="36" y2="46" stroke="rgba(255,140,66,0.4)" stroke-width="1"/>
+            <line x1="40" y1="36" x2="40" y2="46" stroke="rgba(255,140,66,0.4)" stroke-width="1"/>
+            <line x1="32" y1="41" x2="46" y2="41" stroke="rgba(255,140,66,0.4)" stroke-width="1"/>
+            <!-- Card numbers -->
+            <rect x="30" y="60" width="8" height="4" rx="2" fill="rgba(255,255,255,0.2)"/>
+            <rect x="42" y="60" width="8" height="4" rx="2" fill="rgba(255,255,255,0.2)"/>
+            <rect x="54" y="60" width="8" height="4" rx="2" fill="rgba(255,255,255,0.2)"/>
+            <rect x="66" y="60" width="8" height="4" rx="2" fill="rgba(255,255,255,0.2)"/>
+            <!-- UPI badge -->
+            <rect x="34" y="70" width="42" height="14" rx="7" fill="rgba(255,69,0,0.3)" stroke="rgba(255,140,66,0.3)" stroke-width="1"/>
+            <text x="55" y="80" text-anchor="middle" font-size="7" fill="rgba(255,180,100,0.9)" font-family="sans-serif" font-weight="700">PAY ₹29</text>
+            <!-- Checkmark glow -->
+            <circle cx="82" cy="30" r="11" fill="rgba(109,220,122,0.15)" stroke="rgba(109,220,122,0.3)" stroke-width="1.2"/>
+            <path d="M77 30l3.5 3.5 5-5" stroke="#6ddc7a" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </div>
+        <div>
+          <div class="hiw-step-num">Step 02</div>
+          <div class="hiw-title" style="margin-top:10px;">Pay Securely</div>
+          <div class="hiw-desc">Pay via UPI, card, or net banking. Razorpay secured. Takes under 30 seconds.</div>
+        </div>
+      </div>
+      <!-- Arrow -->
+      <div class="hiw-arrow" style="padding:0 12px;">
+        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="rgba(255,100,50,0.5)" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+      </div>
+      <!-- Step 3 -->
+      <div class="hiw-card">
+        <div class="hiw-illus">
+          <svg width="110" height="110" viewBox="0 0 110 110" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <rect width="110" height="110" rx="22" fill="rgba(255,69,0,0.06)"/>
+            <!-- Book / PDF -->
+            <rect x="28" y="22" width="40" height="52" rx="5" fill="rgba(255,255,255,0.06)" stroke="rgba(255,140,66,0.35)" stroke-width="1.5"/>
+            <!-- Book spine -->
+            <rect x="28" y="22" width="6" height="52" rx="3" fill="rgba(255,140,66,0.2)"/>
+            <!-- Lines in book -->
+            <rect x="40" y="32" width="22" height="3" rx="1.5" fill="rgba(255,255,255,0.25)"/>
+            <rect x="40" y="39" width="18" height="3" rx="1.5" fill="rgba(255,255,255,0.15)"/>
+            <rect x="40" y="46" width="20" height="3" rx="1.5" fill="rgba(255,255,255,0.15)"/>
+            <rect x="40" y="53" width="14" height="3" rx="1.5" fill="rgba(255,255,255,0.15)"/>
+            <rect x="40" y="60" width="22" height="3" rx="1.5" fill="rgba(255,255,255,0.1)"/>
+            <!-- PDF badge -->
+            <rect x="26" y="65" width="22" height="12" rx="4" fill="rgba(255,69,0,0.5)"/>
+            <text x="37" y="74" text-anchor="middle" font-size="6.5" fill="white" font-family="sans-serif" font-weight="700">PDF</text>
+            <!-- Email envelope floating -->
+            <rect x="62" y="26" width="26" height="20" rx="5" fill="rgba(255,255,255,0.06)" stroke="rgba(255,140,66,0.4)" stroke-width="1.2"/>
+            <path d="M62 29l13 9 13-9" stroke="rgba(255,140,66,0.5)" stroke-width="1.2" stroke-linecap="round"/>
+            <!-- Download arrow -->
+            <circle cx="75" cy="70" r="13" fill="rgba(255,69,0,0.15)" stroke="rgba(255,140,66,0.3)" stroke-width="1.2"/>
+            <path d="M75 63v10M71 69l4 4 4-4" stroke="rgba(255,140,66,0.9)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </div>
+        <div>
+          <div class="hiw-step-num">Step 03</div>
+          <div class="hiw-title" style="margin-top:10px;">Study Instantly</div>
+          <div class="hiw-desc">File lands in your email within minutes. Open on phone, tablet, or PC — no app needed.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- REVIEWS -->
+  <section class="reviews-section">
+    <div class="reveal" style="text-align:center;margin-bottom:40px;">
+      <div style="font-size:.68rem;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--or3);margin-bottom:12px;">Student Reviews</div>
+      <h2 style="font-family:var(--font-head);font-size:clamp(1.4rem,4vw,2rem);font-weight:800;letter-spacing:-.02em;">What students are <span style="background:linear-gradient(90deg,var(--or1),var(--or3));-webkit-background-clip:text;-webkit-text-fill-color:transparent;">saying</span></h2>
+    </div>
+    <div class="reveal" id="reviews-grid" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:16px;"></div>
+  </section>
+
   <section style="max-width:1100px;margin:0 auto;padding:0 20px 80px;">
     <div class="reveal" style="text-align:center;margin-bottom:40px;">
       <div style="font-size:.68rem;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--or3);margin-bottom:12px;">Why Target1st?</div>
@@ -283,7 +476,11 @@ h1.hero-title .grad{background:linear-gradient(90deg,var(--or1),var(--or4));-web
 <!-- STORE -->
 <div class="view" id="view-store">
   <div class="store-wrap">
-    <div class="store-header reveal"><h2>All <span>Products</span></h2><p>Pick your exam, pick your tool — start scoring.</p></div>
+    <div class="store-header reveal"><h2>All <span>Products</span></h2><p>Pick your exam, pick your tool — start scoring.<br><span style="font-size:.8rem;color:var(--muted);font-weight:400;">Don't see your exam? <a href="https://forms.gle/mo7qtDQE5Fm645929" target="_blank" style="color:var(--or3);text-decoration:none;font-weight:600;">Suggest it →</a></span></p></div>
+    <div class="search-wrap reveal">
+      <svg class="search-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+      <input type="text" class="search-input" id="search-input" placeholder="Search products, topics, exams…" oninput="handleSearch(this.value)">
+    </div>
     <div class="filter-bar reveal" id="filter-bar"></div>
     <div class="product-grid reveal" id="product-grid">
       <div class="skeleton" style="height:380px;"></div>
@@ -291,15 +488,40 @@ h1.hero-title .grad{background:linear-gradient(90deg,var(--or1),var(--or4));-web
       <div class="skeleton" style="height:380px;"></div>
     </div>
     <p id="load-error" style="display:none;text-align:center;color:#f87171;font-size:.9rem;padding:32px;">⚠️ Could not load products. Please refresh.</p>
+    <!-- RECENTLY VIEWED -->
+    <div id="rv-section" class="rv-section" style="display:none;">
+      <div class="rv-title">Recently Viewed</div>
+      <div class="rv-grid" id="rv-grid"></div>
+    </div>
     <div class="suggest-strip reveal">
       <h4>Don't see your exam? 🙋</h4>
       <p>Tell us what you're preparing for and we'll build it next.</p>
-      <a href="https://forms.gle/omCf7U88LGh1ir1f7" target="_blank" rel="noopener" style="display:inline-block;padding:11px 28px;background:linear-gradient(135deg,var(--or1),var(--or3));color:#fff;font-family:var(--font-body);font-size:.85rem;font-weight:600;border-radius:9px;text-decoration:none;">Suggest a Product →</a>
+      <a href="https://forms.gle/mo7qtDQE5Fm645929" target="_blank" rel="noopener" style="display:inline-block;padding:11px 28px;background:linear-gradient(135deg,var(--or1),var(--or3));color:#fff;font-family:var(--font-body);font-size:.85rem;font-weight:600;border-radius:9px;text-decoration:none;">Suggest a Product →</a>
     </div>
   </div>
 </div>
 
-<!-- PRODUCT DETAIL -->
+<!-- CART -->
+<div class="view" id="view-cart">
+  <div class="cart-wrap">
+    <div style="font-family:var(--font-head);font-size:clamp(1.4rem,4vw,2rem);font-weight:800;letter-spacing:-.02em;margin-bottom:28px;">Your <span style="background:linear-gradient(90deg,var(--or1),var(--or3));-webkit-background-clip:text;-webkit-text-fill-color:transparent;">Cart</span></div>
+    <div id="cart-empty" class="cart-empty" style="display:none;">
+      <div class="cart-empty-icon">🛒</div>
+      <div style="font-family:var(--font-head);font-size:1.1rem;font-weight:700;margin-bottom:10px;">Your cart is empty</div>
+      <div style="font-size:.85rem;color:var(--muted);margin-bottom:24px;">Browse our products and add what you need.</div>
+      <button class="btn btn-primary" style="padding:12px 32px;" onclick="navigateTo('store')">Browse Products →</button>
+    </div>
+    <div id="cart-items"></div>
+    <div id="cart-discount-badge" class="cart-discount-badge"></div>
+    <div id="cart-summary" class="cart-summary" style="display:none;">
+      <div class="cart-summary-row"><span>Subtotal</span><span id="cart-subtotal">₹0</span></div>
+      <div class="cart-summary-row discount" id="cart-discount-row" style="display:none;"><span>🎉 Discount Applied</span><span id="cart-discount-amt"></span></div>
+      <div class="cart-summary-row total"><span>Total</span><span id="cart-total">₹0</span></div>
+      <button class="modal-submit" style="margin-top:20px;" onclick="openCartCheckout()">Proceed to Checkout →</button>
+      <button class="btn btn-ghost" style="width:100%;margin-top:10px;" onclick="navigateTo('store')">+ Add More Products</button>
+    </div>
+  </div>
+</div>
 <div class="view" id="view-product">
   <div class="detail-wrap" id="detail-content"></div>
 </div>
@@ -322,7 +544,7 @@ h1.hero-title .grad{background:linear-gradient(90deg,var(--or1),var(--or4));-web
       </ul>
       <h3>Contact</h3>
       <p>Email: <a href="mailto:subhamdahiyasupport@gmail.com" style="color:var(--or3);">subhamdahiyasupport@gmail.com</a></p>
-      <p>Telegram: <a href="https://t.me/Target1steverywhere" target="_blank" style="color:var(--or3);">@Target1steverywhere</a></p>
+      <p>Telegram: <a href="https://t.me/Target1stsupport" target="_blank" style="color:var(--or3);">@Target1stsupport</a></p>
     </div>
   </div>
 </div>
@@ -425,7 +647,8 @@ h1.hero-title .grad{background:linear-gradient(90deg,var(--or1),var(--or4));-web
         <div class="af-group"><label>Name</label><input type="text" id="f-name" placeholder="Full Product Name"></div>
         <div class="af-group"><label>Icon (emoji)</label><input type="text" id="f-icon" value="📄"></div>
         <div class="af-group"><label>Tag Label</label><input type="text" id="f-tag" placeholder="PDF Study Guide"></div>
-        <div class="af-group full"><label>Description</label><input type="text" id="f-desc" placeholder="Short product description"></div>
+        <div class="af-group full"><label>Description (full — shown on detail page)</label><input type="text" id="f-desc" placeholder="Short product description"></div>
+        <div class="af-group full"><label>Short Description (shown on product card in store)</label><input type="text" id="f-short-desc" placeholder="One-line hook e.g. 500 MCQs · 3 full tests · PDF"></div>
         <div class="af-group full"><label>Features (one per line)</label><textarea id="f-features" placeholder="Feature one&#10;Feature two&#10;Feature three"></textarea></div>
         <div class="af-group"><label>Price (₹)</label><input type="number" id="f-price" value="29"></div>
         <div class="af-group"><label>Original Price (₹)</label><input type="number" id="f-orig" value="69"></div>
@@ -446,6 +669,30 @@ h1.hero-title .grad{background:linear-gradient(90deg,var(--or1),var(--or4));-web
         <button class="admin-btn admin-btn-danger" id="delete-btn" style="display:none;" onclick="deleteProduct()">🗑️ Delete</button>
       </div>
     </div>
+    <div class="admin-section">
+      <div class="admin-section-title">💬 Student Reviews</div>
+      <p style="font-size:.78rem;color:var(--muted);margin-bottom:14px;">Exactly 4 reviews shown on homepage. Edit name, exam, review text and rating.</p>
+      <div id="reviews-admin-list"></div>
+    </div>
+    <div class="admin-section">
+      <div class="admin-section-title">🏷️ Cart Discount Rules</div>
+      <p style="font-size:.78rem;color:var(--muted);margin-bottom:14px;">Discount applied automatically when cart total reaches threshold. Best matching rule wins.</p>
+      <div id="discount-rules-list"></div>
+      <div style="display:grid;grid-template-columns:1fr 1fr auto;gap:8px;align-items:end;margin-top:12px;">
+        <div class="af-group"><label>Min Cart Total (₹)</label><input type="number" id="dr-threshold" placeholder="200"></div>
+        <div class="af-group"><label>Discount Amount (₹)</label><input type="number" id="dr-amount" placeholder="50"></div>
+        <button class="admin-btn admin-btn-primary" style="height:38px;margin-top:auto;" onclick="addDiscountRule()">+ Add</button>
+      </div>
+    </div>
+    <div class="admin-section">
+      <div class="admin-section-title">🔐 Change Admin Password</div>
+      <p style="font-size:.78rem;color:var(--muted);margin-bottom:14px;">Password is stored in this browser only. You'll need to update it on each device.</p>
+      <div class="admin-grid">
+        <div class="af-group"><label>Current Password</label><input type="password" id="pw-current" placeholder="Current password"></div>
+        <div class="af-group"><label>New Password</label><input type="password" id="pw-new" placeholder="New password (min 8 chars)"></div>
+      </div>
+      <button class="admin-btn admin-btn-primary" style="margin-top:14px;" onclick="changeAdminPassword()">Update Password</button>
+    </div>
     <div class="admin-section" style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;">
       <div><div class="admin-section-title" style="margin-bottom:2px;">🚀 Push All Changes</div><p style="font-size:.78rem;color:var(--muted);">Push current product list + categories to GitHub.</p></div>
       <button class="admin-btn admin-btn-primary" onclick="pushToGitHub()">Push to GitHub</button>
@@ -460,8 +707,8 @@ h1.hero-title .grad{background:linear-gradient(90deg,var(--or1),var(--or4));-web
       <div class="footer-brand">Target<span>1st</span></div>
       <div class="footer-tagline">India's academic preparation digital store.</div>
       <div class="social-row">
-        <a href="https://youtube.com/@targetbankr" target="_blank" class="social-icon" style="background:#FF0000;"><svg width="16" height="16" viewBox="0 0 24 24" fill="white"><path d="M23.5 6.2s-.3-2-1.2-2.8c-1.1-1.2-2.4-1.2-3-1.3C16.8 2 12 2 12 2s-4.8 0-7.3.1c-.6.1-1.9.1-3 1.3C.8 4.2.5 6.2.5 6.2S.2 8.5.2 10.8v2.1c0 2.3.3 4.6.3 4.6s.3 2 1.2 2.8c1.1 1.2 2.6 1.1 3.3 1.2C7.2 21.7 12 21.8 12 21.8s4.8 0 7.3-.2c.6-.1 1.9-.1 3-1.3.9-.8 1.2-2.8 1.2-2.8s.3-2.3.3-4.6v-2.1C23.8 8.5 23.5 6.2 23.5 6.2zM9.7 15.5V8.4l8.1 3.6-8.1 3.5z"/></svg></a>
-        <a href="https://t.me/Target1steverywhere" target="_blank" class="social-icon" style="background:#229ED9;"><svg width="16" height="16" viewBox="0 0 24 24" fill="white"><path d="M12 0C5.4 0 0 5.4 0 12s5.4 12 12 12 12-5.4 12-12S18.6 0 12 0zm5.9 8.2-2 9.4c-.1.6-.5.8-1 .5l-2.8-2.1-1.3 1.3c-.2.2-.3.3-.6.3l.2-2.9 5.1-4.6c.2-.2 0-.3-.3-.1L6.4 14.5 3.7 13.7c-.6-.2-.6-.6.1-.8l11.5-4.4c.6-.2 1.1.1.6.7z"/></svg></a>
+        <a href="https://youtube.com/@Target1st" target="_blank" class="social-icon" style="background:#FF0000;"><svg width="16" height="16" viewBox="0 0 24 24" fill="white"><path d="M23.5 6.2s-.3-2-1.2-2.8c-1.1-1.2-2.4-1.2-3-1.3C16.8 2 12 2 12 2s-4.8 0-7.3.1c-.6.1-1.9.1-3 1.3C.8 4.2.5 6.2.5 6.2S.2 8.5.2 10.8v2.1c0 2.3.3 4.6.3 4.6s.3 2 1.2 2.8c1.1 1.2 2.6 1.1 3.3 1.2C7.2 21.7 12 21.8 12 21.8s4.8 0 7.3-.2c.6-.1 1.9-.1 3-1.3.9-.8 1.2-2.8 1.2-2.8s.3-2.3.3-4.6v-2.1C23.8 8.5 23.5 6.2 23.5 6.2zM9.7 15.5V8.4l8.1 3.6-8.1 3.5z"/></svg></a>
+        <a href="https://t.me/Target1stsupport" target="_blank" class="social-icon" style="background:#229ED9;"><svg width="16" height="16" viewBox="0 0 24 24" fill="white"><path d="M12 0C5.4 0 0 5.4 0 12s5.4 12 12 12 12-5.4 12-12S18.6 0 12 0zm5.9 8.2-2 9.4c-.1.6-.5.8-1 .5l-2.8-2.1-1.3 1.3c-.2.2-.3.3-.6.3l.2-2.9 5.1-4.6c.2-.2 0-.3-.3-.1L6.4 14.5 3.7 13.7c-.6-.2-.6-.6.1-.8l11.5-4.4c.6-.2 1.1.1.6.7z"/></svg></a>
       </div>
     </div>
     <div class="footer-links">
@@ -470,7 +717,7 @@ h1.hero-title .grad{background:linear-gradient(90deg,var(--or1),var(--or4));-web
       <button class="footer-link" onclick="navigateTo('terms')">Terms of Service</button>
       <button class="footer-link" onclick="navigateTo('refund')">Refund Policy</button>
       <button class="footer-link" onclick="navigateTo('privacy')">Privacy Policy</button>
-      <a href="mailto:subhamdahiyasupport@gmail.com" class="footer-link" style="text-decoration:n1st;">Contact</a>
+      <a href="mailto:subhamdahiyasupport@gmail.com" class="footer-link" style="text-decoration:none;">Contact</a>
     </div>
   </div>
   <div class="footer-bottom">
@@ -502,6 +749,28 @@ h1.hero-title .grad{background:linear-gradient(90deg,var(--or1),var(--or4));-web
   </div>
 </div>
 
+<!-- SPAM NOTICE MODAL -->
+<div class="modal-overlay" id="spam-modal">
+  <div class="modal-box" style="max-width:400px;">
+    <div style="text-align:center;margin-bottom:18px;">
+      <div style="font-size:2.4rem;margin-bottom:8px;">📬</div>
+      <div class="modal-title">Check Your Email!</div>
+    </div>
+    <div style="background:rgba(255,140,50,.08);border:1px solid rgba(255,140,50,.2);border-radius:12px;padding:16px 18px;margin-bottom:18px;">
+      <p style="font-size:.85rem;color:rgba(255,255,255,.85);line-height:1.75;margin:0;">
+        Your file is on its way. <strong style="color:#FF8C42;">Please check your Spam or Promotions folder</strong> if you don't see it in your inbox within 2–3 minutes.
+      </p>
+    </div>
+    <p style="font-size:.78rem;color:rgba(255,255,255,.4);line-height:1.7;margin-bottom:6px;">
+      This happens because our emails are sent automatically after payment — Gmail and other providers sometimes flag automated emails as promotions. This is completely normal and safe. Simply mark it as "Not Spam" to receive future emails in your inbox.
+    </p>
+    <p style="font-size:.78rem;color:rgba(255,255,255,.4);line-height:1.7;margin-bottom:20px;">
+      If you still don't receive it after 5 minutes, reply to the email or contact us on <a href="https://t.me/Target1stsupport" target="_blank" style="color:var(--or3);">Telegram</a>.
+    </p>
+    <button class="modal-submit" onclick="document.getElementById('spam-modal').classList.remove('open')">Got it ✓</button>
+  </div>
+</div>
+
 <!-- TOAST -->
 <div class="toast" id="toast"></div>
 
@@ -509,7 +778,8 @@ h1.hero-title .grad{background:linear-gradient(90deg,var(--or1),var(--or4));-web
 // ── CONFIG ──────────────────────────────────────────────────
 const GAS_URL        = "https://script.google.com/macros/s/AKfycbxUjoBbZMJErzD7PfNLZ7dfiNNmvdbxAqOoujzmXFpGA5olpkwhoLqslI-HlHxCnT_mGQ/exec";
 const RZP_KEY        = "rzp_live_SisR5ciwqWpzmz";
-const ADMIN_PASSWORD = "target@admin2026"; // ← change this
+const DEFAULT_PASS   = "target@admin2026";
+let   ADMIN_PASSWORD = localStorage.getItem('t1st_admin_pw') || DEFAULT_PASS;
 
 // ── STATE ───────────────────────────────────────────────────
 let allProducts    = [];
@@ -531,45 +801,34 @@ let editingId      = null;
 let pendingCheckout = {};
 let currentView    = "home";
 
-// ── HASH-BASED ROUTER ────────────────────────────────────────
+// ── TOAST ────────────────────────────────────────────────────
+let _toastTimer = null;
+function showToast(msg, type) {
+  const el = document.getElementById('toast');
+  if (!el) return;
+  el.textContent = msg;
+  // Colour tint by type
+  el.style.borderColor = type === 'error'   ? 'rgba(248,113,113,.35)'
+                       : type === 'success'  ? 'rgba(109,220,122,.3)'
+                       : type === 'info'     ? 'rgba(255,140,66,.3)'
+                       : 'var(--border)';
+  el.classList.add('show');
+  clearTimeout(_toastTimer);
+  _toastTimer = setTimeout(() => el.classList.remove('show'), 2800);
+}
+
+
 // Supported hashes:
 //   #home  #store  #about  #terms  #refund  #privacy
 //   #adminopen           → opens admin login
 //   #products/id         → opens product detail page
-function handleHash() {
-  const hash = window.location.hash.slice(1); // strip #
-  // If hash is empty (e.g. after admin clears it with replaceState), do nothing
-  if (!hash) return;
-  if (hash === 'home') { showView('home'); return; }
-  if (hash === 'adminopen')     { showAdminLogin(); return; }
-  if (hash === 'store')         { showView('store'); return; }
-  if (hash === 'about')         { showView('about'); return; }
-  if (hash === 'terms')         { showView('terms'); return; }
-  if (hash === 'refund')        { showView('refund'); return; }
-  if (hash === 'privacy')       { showView('privacy'); return; }
-  if (hash.startsWith('products/')) {
-    const id = hash.slice('products/'.length);
-    // Wait for products to load if needed
-    if (allProducts.length > 0) {
-      openProductDetail(id);
-    } else {
-      // Store intent, open after load
-      window._pendingProductId = id;
-    }
-    return;
-  }
-}
-
-function navigateTo(view, navEl) {
-  if (view === 'admin') { showAdminLogin(); return; }
-  window.location.hash = view;
-}
+// handleHash, navigateTo, renderProducts, openProductDetail, renderAdminProductList
+// are defined further below with full cart/search/recently-viewed logic.
 
 function navigateToProduct(id) {
   window.location.hash = 'products/' + id;
 }
 
-window.addEventListener('hashchange', handleHash);
 
 // ── SHOW VIEW ────────────────────────────────────────────────
 function showView(name) {
@@ -578,14 +837,24 @@ function showView(name) {
   if (!target) return;
   target.classList.add('active');
   // Move shared footer
-  target.appendChild(document.getElementById('shared-footer'));
+  const _sf = document.getElementById('shared-footer');
+  if (_sf) target.appendChild(_sf);
   window.scrollTo(0, 0);
   currentView = name;
   // Update nav highlight
   document.querySelectorAll('.nav-tab[data-view]').forEach(t => {
     t.classList.toggle('active-tab', t.dataset.view === name);
   });
-  if (name === 'store') { renderFilterBar(); renderProducts(activeCategory); }
+  if (name === 'store') {
+    renderFilterBar();
+    renderProducts(activeCategory);
+    // Force reveal all elements in store view — IntersectionObserver misses hidden views
+    document.querySelectorAll('#view-store .reveal').forEach(el => el.classList.add('visible'));
+    const grid = document.getElementById('product-grid');
+    const fbar = document.getElementById('filter-bar');
+    if (grid) { grid.classList.add('visible'); grid.style.transitionDelay = '0s'; }
+    if (fbar) { fbar.classList.add('visible'); fbar.style.transitionDelay = '0s'; }
+  }
   setTimeout(() => document.querySelectorAll('.reveal').forEach(el => revealObs.observe(el)), 50);
 }
 
@@ -615,7 +884,17 @@ async function loadProducts() {
       if (data.categories && data.categories.length) allCategories = data.categories;
     }
     renderFilterBar();
-    renderProducts('home');
+    // Update hero stats from real data
+    const liveCount = allProducts.filter(p => p.status !== 'hidden').length;
+    const catCount  = allCategories.filter(c => c.id !== 'home').length;
+    const spEl = document.getElementById('stat-products');
+    const scEl = document.getElementById('stat-categories');
+    if (spEl) spEl.textContent = liveCount > 0 ? liveCount + '+' : '—';
+    if (scEl) scEl.textContent = catCount  > 0 ? catCount  + '+' : '—';
+    // Only render products if store is currently visible, respect active category
+    const storeVisible = document.getElementById('view-store').classList.contains('active');
+    if (storeVisible) renderProducts(activeCategory);
+    else renderProducts('home'); // pre-render silently for when store opens
     // Handle deferred product deep-link
     if (window._pendingProductId) {
       openProductDetail(window._pendingProductId);
@@ -638,6 +917,9 @@ function renderFilterBar() {
 }
 function filterProducts(cat, el) {
   activeCategory = cat;
+  searchQuery = '';
+  const si = document.getElementById('search-input');
+  if (si) si.value = '';
   document.querySelectorAll('.ftab').forEach(b => b.classList.remove('active'));
   if (el) el.classList.add('active');
   renderProducts(cat);
@@ -661,11 +943,12 @@ function buildCard(p) {
   const oc = isDark ? 'rgba(255,255,255,.35)' : 'var(--muted)';
   const offBg = isDark ? 'background:rgba(255,140,50,.15);color:#FFA552;' : '';
 
+  const badgeHtml = p.badge ? `<div class="card-badge">${p.badge}</div>` : '';
   const bannerHtml = p.bannerUrl
-    ? `<div class="pcard-banner-wrap">${p.badge?`<div class="card-badge">${p.badge}</div>`:''}<img src="${p.bannerUrl}" class="pcard-banner" alt="" draggable="false" loading="lazy"><div class="pcard-banner-overlay"></div></div>`
-    : (p.badge ? `<div style="padding:14px 14px 0;"><span class="card-badge" style="position:relative;top:auto;right:auto;display:inline-block;">${p.badge}</span></div>` : '');
+    ? `<div class="pcard-banner-wrap"><img src="${p.bannerUrl}" class="pcard-banner" alt="" draggable="false" loading="lazy"><div class="pcard-banner-overlay"></div></div>`
+    : '';
 
-  const priceHtml = p.price === 0
+  const priceHtml = (p.status === 'free' || p.price === 0)
     ? `<div class="price-main" style="color:var(--or3);">Free</div>`
     : `<div class="price-main">₹${p.price}</div><div class="price-orig" style="color:${oc};">₹${p.originalPrice}</div><div class="price-off" style="${offBg}">${p.discount}</div>`;
 
@@ -677,12 +960,19 @@ function buildCard(p) {
   let actionBtns = '';
   if (p.status === 'coming_soon') {
     actionBtns = `<div class="card-btns single"><button class="btn btn-disabled" disabled>🔒 Coming Soon</button></div>`;
-  } else if (p.status === 'free' && p.externalLink) {
-    const demoBtn = p.demoLink ? `<button class="btn btn-ghost" onclick="openDemoModal('${safeDemo}','${safeName}')">👁 Demo</button>` : '';
-    actionBtns = `<div class="card-btns${!p.demoLink?' single':''}">
-      ${demoBtn}
-      <a href="${p.externalLink}" target="_blank" class="btn btn-free">Access Free</a>
-    </div>`;
+  } else if (p.status === 'free' || p.price === 0) {
+    if (p.externalLink) {
+      const demoBtn = p.demoLink ? `<button class="btn btn-ghost" onclick="openDemoModal('${safeDemo}','${safeName}')">👁 Demo</button>` : '';
+      actionBtns = `<div class="card-btns${!p.demoLink?' single':''}">
+        ${demoBtn}
+        <a href="${p.externalLink}" target="_blank" class="btn btn-free">Access Free</a>
+      </div>`;
+    } else if (p.driveLink) {
+      // Free product with drive link — collect email then send via GAS, no Razorpay
+      actionBtns = `<div class="card-btns single"><button class="btn btn-free" onclick="openFreeModal('${safeBuy}','${safeName}')">📥 Get Free</button></div>`;
+    } else {
+      actionBtns = `<div class="card-btns single"><button class="btn btn-disabled" disabled>Coming Soon</button></div>`;
+    }
   } else {
     const demoBtn = p.demoLink ? `<button class="btn btn-ghost" onclick="openDemoModal('${safeDemo}','${safeName}')">👁 Demo</button>` : '';
     actionBtns = `<div class="card-btns${!p.demoLink?' single':''}">
@@ -694,19 +984,23 @@ function buildCard(p) {
   // "View Details" link — opens product page
   const detailBtn = `<button class="btn btn-detail" style="margin-top:8px;width:100%;" onclick="navigateToProduct('${p.id}')">View Details →</button>`;
 
-  const features = (p.features||[]).map(f =>
+  const cardDesc = p.shortDesc || p.description;
+  const features = (p.features||[]).slice(0,3).map(f =>
     `<li style="color:${lc};">${checkIcon(isDark)} ${f}</li>`
   ).join('');
+  const moreFeatures = (p.features||[]).length > 3
+    ? `<li style="color:${lc};opacity:.55;">${checkIcon(isDark)} +${(p.features.length-3)} more included…</li>` : '';
 
   return `
   <div class="pcard${p.featured?' featured':''}" style="${cardStyle}">
+    ${badgeHtml}
     ${bannerHtml}
     <div class="pcard-body">
       <div class="card-icon-wrap" style="background:${p.iconBg||'rgba(255,69,0,.1)'};">${p.icon||'📄'}</div>
       <span class="card-tag" style="background:${p.tagBg||'rgba(255,69,0,.1)'};color:${p.tagColor||'var(--or3)'};">${p.tag||'Product'}</span>
       <div class="card-name">${p.name}</div>
-      <div class="card-desc" style="color:${dc};">${p.description}</div>
-      <ul class="card-features">${features}</ul>
+      <div class="card-desc" style="color:${dc};">${cardDesc}</div>
+      <ul class="card-features">${features}${moreFeatures}</ul>
       <div class="card-price-row">${priceHtml}</div>
       ${actionBtns}
       ${detailBtn}
@@ -714,24 +1008,10 @@ function buildCard(p) {
   </div>`;
 }
 
-function renderProducts(cat) {
-  const grid = document.getElementById('product-grid');
-  if (!grid) return;
-  const filtered = allProducts.filter(p => {
-    if (Array.isArray(p.categories)) return p.categories.includes(cat);
-    return p.category === cat;
-  }).filter(p => p.status !== 'hidden');
-  if (!filtered.length) {
-    grid.innerHTML = `<div style="grid-column:1/-1;text-align:center;padding:48px;color:var(--muted);font-size:.9rem;">No products here yet. Check back soon!</div>`;
-  } else {
-    grid.innerHTML = filtered.map(buildCard).join('');
-  }
-}
+// renderProducts defined below
 
 // ── PRODUCT DETAIL PAGE ──────────────────────────────────────
-function openProductDetail(id) {
-  const p = allProducts.find(x => x.id === id);
-  if (!p) { showView('store'); return; }
+function _openProductDetailCore(p) {
 
   const isDark = ['dark-navy','dark-red','dark-green'].includes(p.theme);
   let bgStyle = '';
@@ -751,7 +1031,7 @@ function openProductDetail(id) {
   const badgeHtml = p.badge
     ? `<div class="detail-badge">${p.badge}</div><br>` : '';
 
-  const priceHtml = p.price === 0
+  const priceHtml = (p.status === 'free' || p.price === 0)
     ? `<div class="detail-price" style="color:var(--or3);">Free</div>`
     : `<div class="detail-price">₹${p.price}</div>
        <div class="detail-orig">₹${p.originalPrice}</div>
@@ -760,12 +1040,18 @@ function openProductDetail(id) {
   let btns = '';
   if (p.status === 'coming_soon') {
     btns = `<div class="detail-btns single"><button class="btn btn-disabled" disabled style="padding:14px;">🔒 Coming Soon</button></div>`;
-  } else if (p.status === 'free' && p.externalLink) {
-    const demoBtn = p.demoLink ? `<button class="btn btn-ghost" style="padding:14px;" onclick="openDemoModal('${safeDemo}','${safeName}')">👁 Free Demo</button>` : '';
-    btns = `<div class="detail-btns${!p.demoLink?' single':''}">
-      ${demoBtn}
-      <a href="${p.externalLink}" target="_blank" class="btn btn-free" style="padding:14px;">Access Free →</a>
-    </div>`;
+  } else if (p.status === 'free' || p.price === 0) {
+    if (p.externalLink) {
+      const demoBtn = p.demoLink ? `<button class="btn btn-ghost" style="padding:14px;" onclick="openDemoModal('${safeDemo}','${safeName}')">👁 Free Demo</button>` : '';
+      btns = `<div class="detail-btns${!p.demoLink?' single':''}">
+        ${demoBtn}
+        <a href="${p.externalLink}" target="_blank" class="btn btn-free" style="padding:14px;">Access Free →</a>
+      </div>`;
+    } else if (p.driveLink) {
+      btns = `<div class="detail-btns single"><button class="btn btn-free" style="padding:14px;font-size:.95rem;" onclick="openFreeModal('${safeBuy}','${safeName}')">📥 Get Free — Enter Email</button></div>`;
+    } else {
+      btns = `<div class="detail-btns single"><button class="btn btn-disabled" disabled style="padding:14px;">Coming Soon</button></div>`;
+    }
   } else {
     const demoBtn = p.demoLink ? `<button class="btn btn-ghost" style="padding:14px;" onclick="openDemoModal('${safeDemo}','${safeName}')">👁 Free Demo</button>` : '';
     btns = `<div class="detail-btns${!p.demoLink?' single':''}">
@@ -779,6 +1065,9 @@ function openProductDetail(id) {
   ).join('');
 
   const cardBg = isDark ? `style="${bgStyle}border-radius:16px;padding:24px;border:1px solid var(--border);margin-bottom:28px;"` : '';
+
+  const waMsg = encodeURIComponent(`🎯 Hey! Check out this study material for your exam prep:\n\n📚 *${p.name}*\n💰 Only ₹${p.price}\n\n👉 ${window.location.origin}${window.location.pathname}#products/${p.id}\n\nFrom Target1st — India's Academic Prep Store 🇮🇳`);
+  const waBtn = `<a href="https://wa.me/?text=${waMsg}" target="_blank" class="wa-share-btn"><svg width="16" height="16" viewBox="0 0 24 24" fill="white"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg> Share on WhatsApp</a>`;
 
   document.getElementById('detail-content').innerHTML = `
     <button class="detail-back" onclick="history.back()">
@@ -797,11 +1086,14 @@ function openProductDetail(id) {
       </div>
       <div class="detail-price-row">${priceHtml}</div>
       ${btns}
+      <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-top:4px;">
+        ${waBtn}
+        <button class="btn btn-ghost" style="padding:10px 16px;font-size:.8rem;" onclick="addToCart('${p.id}')">🛒 Add to Cart</button>
+      </div>
     </div>
   `;
 
   showView('product');
-  // Update URL
   document.title = p.name + ' — Target1st';
 }
 
@@ -811,6 +1103,14 @@ function openBuyModal(enc, name, paise) {
   document.getElementById('cm-title').textContent = 'Buy — ' + name;
   document.getElementById('cm-sub').textContent   = 'Enter your details. File sent to email after payment.';
   document.getElementById('cm-submit').textContent = `Pay ₹${paise/100} & Get File →`;
+  clearModalFields();
+  document.getElementById('checkout-modal').classList.add('open');
+}
+function openFreeModal(enc, name) {
+  pendingCheckout = {type:'free', driveLink:decodeURIComponent(enc), name, paise:0};
+  document.getElementById('cm-title').textContent = '📥 Get Free — ' + name;
+  document.getElementById('cm-sub').textContent   = 'Enter your details to receive the file on your email instantly.';
+  document.getElementById('cm-submit').textContent = 'Send to My Email →';
   clearModalFields();
   document.getElementById('checkout-modal').classList.add('open');
 }
@@ -829,21 +1129,6 @@ function clearModalFields() {
 }
 function closeCheckoutModal() { document.getElementById('checkout-modal').classList.remove('open'); }
 
-function proceedCheckout() {
-  const name   = document.getElementById('cm-name').value.trim();
-  const mobile = document.getElementById('cm-mobile').value.trim();
-  const email  = document.getElementById('cm-email').value.trim();
-  if (!name||!mobile||!email) { showToast('Please fill all fields'); return; }
-  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) { showToast('Enter a valid email'); return; }
-  if (!/^\d{10}$/.test(mobile)) { showToast('Enter 10-digit mobile number'); return; }
-  closeCheckoutModal();
-  if (pendingCheckout.type === 'demo') {
-    triggerEmail(email, name, pendingCheckout.driveLink, pendingCheckout.name + ' (Demo)', 'FREE-DEMO', '0');
-    showToast('✅ Demo sent to ' + email);
-  } else {
-    launchRazorpay(email, name, mobile);
-  }
-}
 function launchRazorpay(email, name, mobile) {
   const {driveLink, name:pName, paise} = pendingCheckout;
   new Razorpay({
@@ -854,19 +1139,22 @@ function launchRazorpay(email, name, mobile) {
     handler: function(res) {
       triggerEmail(email, name, driveLink, pName, res.razorpay_payment_id, (paise/100).toFixed(2));
       showToast('🎉 Payment done! File sent to ' + email);
+      document.getElementById('spam-modal').classList.add('open');
     }
   }).open();
 }
 function triggerEmail(email, name, driveLink, productName, paymentId, amount) {
   fetch(GAS_URL + '?' + new URLSearchParams({email,name,driveLink,productName,paymentId,amount}), {method:'GET'})
-    .then(r=>r.json()).catch(e=>console.log('GAS err',e));
-}
-
-// ── TOAST ────────────────────────────────────────────────────
-function showToast(msg) {
-  const t = document.getElementById('toast');
-  t.textContent = msg; t.classList.add('show');
-  setTimeout(() => t.classList.remove('show'), 3800);
+    .then(r => r.json())
+    .then(data => {
+      if (data && data.status === 'error') {
+        showToast('⚠️ File delivery issue — contact us on Telegram with your payment ID', 'error');
+      }
+    })
+    .catch(e => {
+      console.log('GAS err', e);
+      showToast('⚠️ Could not send email automatically — contact us on Telegram', 'error');
+    });
 }
 
 // ── ADMIN LOGIN ──────────────────────────────────────────────
@@ -881,11 +1169,22 @@ function checkAdminPass() {
     showView('admin');
     renderAdminProductList();
     renderAdminCatList();
-    history.replaceState(null, '', window.location.pathname); // clear hash without re-triggering hashchange
+    history.replaceState(null, '', window.location.pathname);
   } else {
-    showToast('❌ Wrong password');
+    showToast('❌ Wrong password', 'error');
     document.getElementById('admin-pass-input').value = '';
   }
+}
+function changeAdminPassword() {
+  const current = document.getElementById('pw-current').value;
+  const newPw   = document.getElementById('pw-new').value.trim();
+  if (current !== ADMIN_PASSWORD) { showToast('❌ Current password is wrong', 'error'); return; }
+  if (newPw.length < 8) { showToast('⚠️ New password must be at least 8 characters', 'error'); return; }
+  ADMIN_PASSWORD = newPw;
+  localStorage.setItem('t1st_admin_pw', newPw);
+  document.getElementById('pw-current').value = '';
+  document.getElementById('pw-new').value = '';
+  showToast('✅ Password updated successfully');
 }
 
 // ── ADMIN: CATEGORIES ────────────────────────────────────────
@@ -914,24 +1213,6 @@ function removeCat(id) {
   showToast('Removed — push to GitHub to save');
 }
 
-// ── ADMIN: PRODUCT LIST ──────────────────────────────────────
-function renderAdminProductList() {
-  const el = document.getElementById('admin-product-list');
-  if (!el) return;
-  if (!allProducts.length) { el.innerHTML=`<p style="font-size:.82rem;color:var(--muted);">No products yet.</p>`; return; }
-  el.innerHTML = allProducts.map((p,i) => {
-    const sc = p.status==='live'?'pli-live':p.status==='free'?'pli-free':'pli-soon';
-    const sl = p.status==='coming_soon'?'Soon':p.status.charAt(0).toUpperCase()+p.status.slice(1);
-    return `<div class="product-list-item">
-      <span>${p.icon||'📄'}</span>
-      <span class="pli-name">${p.name}</span>
-      <span class="pli-status ${sc}">${sl}</span>
-      <div class="pli-actions">
-        <button class="admin-btn admin-btn-ghost" style="padding:5px 12px;font-size:.75rem;" onclick="editProduct(${i})">Edit</button>
-      </div>
-    </div>`;
-  }).join('');
-}
 
 // ── ADMIN: FORM ──────────────────────────────────────────────
 function openAddForm() {
@@ -952,6 +1233,7 @@ function editProduct(idx) {
   document.getElementById('f-icon').value     = p.icon||'📄';
   document.getElementById('f-tag').value      = p.tag||'';
   document.getElementById('f-desc').value     = p.description||'';
+  document.getElementById('f-short-desc').value = p.shortDesc||'';
   document.getElementById('f-features').value = (p.features||[]).join('\n');
   document.getElementById('f-price').value    = p.price||0;
   document.getElementById('f-orig').value     = p.originalPrice||0;
@@ -971,7 +1253,7 @@ function editProduct(idx) {
   document.getElementById('product-form-section').scrollIntoView({behavior:'smooth'});
 }
 function clearForm() {
-  ['f-id','f-name','f-tag','f-desc','f-features','f-badge','f-drive','f-demo','f-external','f-banner','f-cats'].forEach(id=>document.getElementById(id).value='');
+  ['f-id','f-name','f-tag','f-desc','f-short-desc','f-features','f-badge','f-drive','f-demo','f-external','f-banner','f-cats'].forEach(id=>document.getElementById(id).value='');
   document.getElementById('f-icon').value='📄';
   document.getElementById('f-price').value='29';
   document.getElementById('f-orig').value='69';
@@ -1002,6 +1284,7 @@ function saveProduct() {
     tag         : document.getElementById('f-tag').value||'Product',
     tagBg       : 'rgba(255,69,0,.1)', tagColor:'var(--or3)', iconBg:'rgba(255,69,0,.1)',
     description : document.getElementById('f-desc').value,
+    shortDesc   : document.getElementById('f-short-desc').value.trim() || null,
     features    : document.getElementById('f-features').value.split('\n').map(s=>s.trim()).filter(Boolean),
     price       : parseFloat(document.getElementById('f-price').value)||0,
     originalPrice: parseFloat(document.getElementById('f-orig').value)||0,
@@ -1092,8 +1375,354 @@ async function testGitHub() {
   } catch(e) { s.textContent='❌ '+e.message; s.className='gh-status gh-err'; }
 }
 
+// ── CART ─────────────────────────────────────────────────────
+let cart = JSON.parse(localStorage.getItem('t1st_cart') || '[]');
+let discountRules = JSON.parse(localStorage.getItem('t1st_discount_rules') || '[{"threshold":200,"amount":50},{"threshold":500,"amount":100}]');
+
+function saveCart() { localStorage.setItem('t1st_cart', JSON.stringify(cart)); updateCartBadge(); }
+function updateCartBadge() {
+  const badge = document.getElementById('cart-badge');
+  if (!badge) return;
+  badge.textContent = cart.length;
+  badge.style.display = cart.length > 0 ? 'inline-flex' : 'none';
+}
+function addToCart(productId) {
+  const p = allProducts.find(x => x.id === productId);
+  if (!p) return;
+  if (p.status === 'coming_soon') {
+    showToast('⏳ Coming soon — not available yet!', 'info'); return;
+  }
+  if (p.status === 'free' || p.price === 0) {
+    showToast('🆓 This is free! Use the "Get Free" button below to claim it.', 'info'); return;
+  }
+  if (cart.find(x => x.id === productId)) {
+    showToast('🛒 Already in your cart!', 'info'); return;
+  }
+  cart.push({ id: p.id, name: p.name, icon: p.icon || '📄', price: p.price || 0, driveLink: p.driveLink });
+  saveCart();
+  showToast('✅ Added to cart — ' + p.name, 'success');
+}
+function removeFromCart(productId) {
+  cart = cart.filter(x => x.id !== productId);
+  saveCart();
+  renderCart();
+}
+function getBestDiscount(total) {
+  let best = null;
+  discountRules.forEach(r => {
+    if (total >= r.threshold) {
+      if (!best || r.amount > best.amount) best = r;
+    }
+  });
+  return best;
+}
+function renderCart() {
+  const itemsEl   = document.getElementById('cart-items');
+  const emptyEl   = document.getElementById('cart-empty');
+  const summaryEl = document.getElementById('cart-summary');
+  const badgeEl   = document.getElementById('cart-discount-badge');
+  if (!itemsEl) return;
+  if (cart.length === 0) {
+    emptyEl.style.display = 'block';
+    summaryEl.style.display = 'none';
+    itemsEl.innerHTML = '';
+    badgeEl.classList.remove('visible');
+    return;
+  }
+  emptyEl.style.display = 'none';
+  summaryEl.style.display = 'block';
+  itemsEl.innerHTML = cart.map(item => `
+    <div class="cart-item">
+      <div class="cart-item-icon">${item.icon}</div>
+      <div class="cart-item-info">
+        <div class="cart-item-name">${item.name}</div>
+        <div class="cart-item-price">₹${item.price}</div>
+      </div>
+      <button class="cart-item-remove" onclick="removeFromCart('${item.id}')" title="Remove">✕</button>
+    </div>`).join('');
+  const subtotal = cart.reduce((s, x) => s + (x.price || 0), 0);
+  const discount = getBestDiscount(subtotal);
+  const total    = Math.max(0, subtotal - (discount ? discount.amount : 0));
+  document.getElementById('cart-subtotal').textContent = '₹' + subtotal;
+  document.getElementById('cart-total').textContent    = '₹' + total;
+  const discRow = document.getElementById('cart-discount-row');
+  if (discount) {
+    discRow.style.display = 'flex';
+    document.getElementById('cart-discount-amt').textContent = '−₹' + discount.amount;
+    badgeEl.classList.add('visible');
+    badgeEl.textContent = `🎉 ₹${discount.amount} off applied! You saved ₹${discount.amount} on this order.`;
+  } else {
+    discRow.style.display = 'none';
+    badgeEl.classList.remove('visible');
+    // Show next discount hint
+    const nextRule = discountRules.filter(r => r.threshold > subtotal).sort((a,b) => a.threshold - b.threshold)[0];
+    if (nextRule) {
+      badgeEl.classList.add('visible');
+      badgeEl.style.background = 'rgba(255,140,50,.06)';
+      badgeEl.style.borderColor = 'rgba(255,140,50,.15)';
+      badgeEl.style.color = 'rgba(255,180,80,.8)';
+      badgeEl.textContent = `💡 Add ₹${nextRule.threshold - subtotal} more to get ₹${nextRule.amount} off!`;
+    }
+  }
+}
+function openCartCheckout() {
+  const subtotal = cart.reduce((s, x) => s + (x.price || 0), 0);
+  const discount = getBestDiscount(subtotal);
+  const total    = Math.max(0, subtotal - (discount ? discount.amount : 0));
+  if (total === 0) { showToast('🛒 Cart is empty or total is ₹0', 'error'); return; }
+  const names = cart.map(x => x.name).join(', ');
+  pendingCheckout = { type: 'cart', items: [...cart], paise: total * 100, name: names, discount: discount ? discount.amount : 0 };
+  document.getElementById('cm-title').textContent = `Checkout — ${cart.length} item${cart.length > 1 ? 's' : ''}`;
+  document.getElementById('cm-sub').textContent   = `Total: ₹${total}${discount ? ` (₹${discount.amount} discount applied!)` : ''}`;
+  document.getElementById('cm-submit').textContent = `Pay ₹${total} & Get Files →`;
+  clearModalFields();
+  document.getElementById('checkout-modal').classList.add('open');
+}
+
+// ── CART CHECKOUT ─────────────────────────────────────────────
+function proceedCheckout() {
+  const name   = document.getElementById('cm-name').value.trim();
+  const mobile = document.getElementById('cm-mobile').value.trim();
+  const email  = document.getElementById('cm-email').value.trim();
+  if (!name||!mobile||!email) { showToast('⚠️ Please fill all fields', 'error'); return; }
+  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) { showToast('⚠️ Enter a valid email address', 'error'); return; }
+  if (!/^\d{10}$/.test(mobile)) { showToast('⚠️ Enter a 10-digit mobile number', 'error'); return; }
+  closeCheckoutModal();
+  if (pendingCheckout.type === 'demo') {
+    triggerEmail(email, name, pendingCheckout.driveLink, pendingCheckout.name + ' (Demo)', 'FREE-DEMO', '0');
+    showToast('✅ Demo sent to ' + email, 'success');
+    document.getElementById('spam-modal').classList.add('open');
+  } else if (pendingCheckout.type === 'free') {
+    triggerEmail(email, name, pendingCheckout.driveLink, pendingCheckout.name, 'FREE', '0');
+    showToast('✅ File sent to ' + email, 'success');
+    document.getElementById('spam-modal').classList.add('open');
+  } else if (pendingCheckout.type === 'cart') {
+    launchRazorpayCart(email, name, mobile);
+  } else {
+    launchRazorpay(email, name, mobile);
+  }
+}
+function launchRazorpayCart(email, name, mobile) {
+  const { items, paise } = pendingCheckout;
+  const opts = {
+    key: RZP_KEY, amount: paise, currency: 'INR',
+    name: 'Target1st', description: `${items.length} products`,
+    prefill: { name, email, contact: mobile },
+    theme: { color: '#FF4500' },
+    handler: function(res) {
+      // Send one email per item
+      items.forEach(item => {
+        triggerEmail(email, name, item.driveLink, item.name, res.razorpay_payment_id, (paise/100).toFixed(2));
+      });
+      cart = [];
+      saveCart();
+      showToast('🎉 Payment done! Files sent to ' + email, 'success');
+      document.getElementById('spam-modal').classList.add('open');
+    }
+  };
+  new Razorpay(opts).open();
+}
+
+// ── SEARCH ───────────────────────────────────────────────────
+let searchQuery = '';
+function handleSearch(val) {
+  searchQuery = val.toLowerCase().trim();
+  renderProducts(activeCategory);
+}
+function setCategory(cat) {
+  activeCategory = cat;
+  searchQuery = '';
+  const si = document.getElementById('search-input');
+  if (si) si.value = '';
+  renderFilterBar();
+  renderProducts(cat);
+}
+
+// ── RECENTLY VIEWED ──────────────────────────────────────────
+function addToRecentlyViewed(productId) {
+  let rv = JSON.parse(localStorage.getItem('t1st_rv') || '[]');
+  rv = rv.filter(id => id !== productId);
+  rv.unshift(productId);
+  rv = rv.slice(0, 3);
+  localStorage.setItem('t1st_rv', JSON.stringify(rv));
+}
+function renderRecentlyViewed() {
+  const rv = JSON.parse(localStorage.getItem('t1st_rv') || '[]');
+  const section = document.getElementById('rv-section');
+  const grid    = document.getElementById('rv-grid');
+  if (!section || !grid || !allProducts.length) return;
+  const items = rv.map(id => allProducts.find(p => p.id === id)).filter(Boolean);
+  if (items.length === 0) { section.style.display = 'none'; return; }
+  section.style.display = 'block';
+  grid.innerHTML = items.map(p => `
+    <div class="rv-card" onclick="navigateToProduct('${p.id}')">
+      <div class="rv-card-icon">${p.icon || '📄'}</div>
+      <div class="rv-card-name">${p.name}</div>
+      <div class="rv-card-price">${p.price > 0 ? '₹' + p.price : 'Free'}</div>
+    </div>`).join('');
+}
+
+// ── REVIEWS ──────────────────────────────────────────────────
+const DEFAULT_REVIEWS = [
+  { name: 'Rahul Sharma', exam: 'IBPS PO 2024', stars: 5, text: 'The reasoning PDF is incredibly well-structured. Got selected in IBPS PO and this material genuinely helped me crack the sectional cutoff.' },
+  { name: 'Priya Verma', exam: 'SSC CGL Aspirant', stars: 5, text: 'Worth every rupee. The mock tests are exactly on SSC pattern. I practiced 3 full tests from here and my accuracy jumped from 68% to 84%.' },
+  { name: 'Amit Yadav', exam: 'RRB NTPC 2024', stars: 4, text: 'Affordable and exam-focused. No unnecessary filler content. The GK current affairs PDF had most of the questions that came in my exam.' },
+  { name: 'Sneha Gupta', exam: 'SBI Clerk Aspirant', stars: 5, text: 'Instant delivery on email was a game changer. Downloaded at 11PM and was studying by 11:05PM. Highly recommend to every serious aspirant.' },
+];
+let reviews = JSON.parse(localStorage.getItem('t1st_reviews') || 'null') || DEFAULT_REVIEWS;
+
+function saveReviews() { localStorage.setItem('t1st_reviews', JSON.stringify(reviews)); }
+const AVATAR_COLORS = ['#FF4500','#3B82F6','#8B5CF6','#10B981'];
+function renderReviewsHome() {
+  const grid = document.getElementById('reviews-grid');
+  if (!grid) return;
+  grid.innerHTML = reviews.map((r, i) => `
+    <div class="review-card">
+      <div class="review-stars">${'★'.repeat(r.stars)}${'☆'.repeat(5 - r.stars)}</div>
+      <div class="review-text">"${r.text}"</div>
+      <div class="review-author">
+        <div class="review-avatar" style="background:${AVATAR_COLORS[i % AVATAR_COLORS.length]};">${r.name.charAt(0)}</div>
+        <div><div class="review-name">${r.name}</div><div class="review-exam">${r.exam}</div></div>
+      </div>
+    </div>`).join('');
+}
+function renderReviewsAdmin() {
+  const el = document.getElementById('reviews-admin-list');
+  if (!el) return;
+  el.innerHTML = reviews.map((r, i) => `
+    <div style="background:var(--dark3);border-radius:10px;padding:14px;margin-bottom:10px;">
+      <div class="admin-grid" style="margin-bottom:10px;">
+        <div class="af-group"><label>Name</label><input type="text" value="${r.name}" onchange="reviews[${i}].name=this.value;saveReviews();renderReviewsHome();" style="background:var(--dark);border:1px solid var(--border);color:#fff;font-family:var(--font-body);font-size:.82rem;padding:7px 10px;border-radius:7px;outline:none;width:100%;"></div>
+        <div class="af-group"><label>Exam</label><input type="text" value="${r.exam}" onchange="reviews[${i}].exam=this.value;saveReviews();renderReviewsHome();" style="background:var(--dark);border:1px solid var(--border);color:#fff;font-family:var(--font-body);font-size:.82rem;padding:7px 10px;border-radius:7px;outline:none;width:100%;"></div>
+        <div class="af-group"><label>Stars (1-5)</label><input type="number" min="1" max="5" value="${r.stars}" onchange="reviews[${i}].stars=+this.value;saveReviews();renderReviewsHome();" style="background:var(--dark);border:1px solid var(--border);color:#fff;font-family:var(--font-body);font-size:.82rem;padding:7px 10px;border-radius:7px;outline:none;width:100%;"></div>
+      </div>
+      <div class="af-group"><label>Review Text</label><textarea rows="2" onchange="reviews[${i}].text=this.value;saveReviews();renderReviewsHome();" style="background:var(--dark);border:1px solid var(--border);color:#fff;font-family:var(--font-body);font-size:.82rem;padding:7px 10px;border-radius:7px;outline:none;width:100%;resize:vertical;">${r.text}</textarea></div>
+    </div>`).join('');
+}
+
+// ── DISCOUNT RULES ADMIN ─────────────────────────────────────
+function saveDiscountRules() { localStorage.setItem('t1st_discount_rules', JSON.stringify(discountRules)); }
+function addDiscountRule() {
+  const t = parseInt(document.getElementById('dr-threshold').value);
+  const a = parseInt(document.getElementById('dr-amount').value);
+  if (!t || !a) { showToast('Enter both threshold and amount'); return; }
+  if (discountRules.find(r => r.threshold === t)) { showToast('Rule for this threshold already exists'); return; }
+  discountRules.push({ threshold: t, amount: a });
+  discountRules.sort((a, b) => a.threshold - b.threshold);
+  saveDiscountRules();
+  renderDiscountRulesAdmin();
+  document.getElementById('dr-threshold').value = '';
+  document.getElementById('dr-amount').value = '';
+  showToast('Rule added');
+}
+function removeDiscountRule(idx) {
+  discountRules.splice(idx, 1);
+  saveDiscountRules();
+  renderDiscountRulesAdmin();
+}
+function renderDiscountRulesAdmin() {
+  const el = document.getElementById('discount-rules-list');
+  if (!el) return;
+  if (!discountRules.length) { el.innerHTML = '<p style="font-size:.8rem;color:var(--muted);">No rules yet.</p>'; return; }
+  el.innerHTML = discountRules.map((r, i) => `
+    <div style="display:flex;align-items:center;justify-content:space-between;background:var(--dark3);border-radius:9px;padding:10px 14px;margin-bottom:8px;font-size:.85rem;">
+      <span>Cart ≥ <strong style="color:var(--or3);">₹${r.threshold}</strong> → <strong style="color:#6ddc7a;">₹${r.amount} off</strong></span>
+      <button class="cart-item-remove" onclick="removeDiscountRule(${i})">✕</button>
+    </div>`).join('');
+}
+
+// ── INIT UPDATES ─────────────────────────────────────────────
+updateCartBadge();
+renderReviewsHome();
+
+// ── ROUTER UPDATE — cart + hash ──────────────────────────────
+window.addEventListener('hashchange', handleHash);
+
+function handleHash() {
+  const hash = window.location.hash.slice(1);
+  if (!hash) return;
+  if (hash === 'home')         { showView('home'); return; }
+  if (hash === 'cart')         { showView('cart'); renderCart(); return; }
+  if (hash === 'adminopen')    { showAdminLogin(); return; }
+  if (hash === 'store')        { showView('store'); return; }
+  if (hash === 'about')        { showView('about'); return; }
+  if (hash === 'terms')        { showView('terms'); return; }
+  if (hash === 'refund')       { showView('refund'); return; }
+  if (hash === 'privacy')      { showView('privacy'); return; }
+  if (hash.startsWith('products/')) {
+    const id = hash.slice('products/'.length);
+    if (allProducts.length > 0) { openProductDetail(id); }
+    else { window._pendingProductId = id; }
+    return;
+  }
+  // Unknown hash — fall back to home
+  showView('home');
+}
+function navigateTo(view, navEl) {
+  if (view === 'admin') { showAdminLogin(); return; }
+  window.location.hash = view;
+}
+function renderProducts(cat) {
+  const grid = document.getElementById('product-grid');
+  if (!grid) return;
+  let list = allProducts.filter(p => p.status !== 'hidden');
+  // Apply search filter
+  if (searchQuery) {
+    list = list.filter(p =>
+      p.name.toLowerCase().includes(searchQuery) ||
+      (p.description || '').toLowerCase().includes(searchQuery) ||
+      (p.features || []).some(f => f.toLowerCase().includes(searchQuery)) ||
+      (p.categories || []).some(c => c.toLowerCase().includes(searchQuery))
+    );
+    if (!list.length) {
+      grid.innerHTML = `<div style="grid-column:1/-1;text-align:center;padding:60px 20px;color:var(--muted);font-size:.9rem;">No products found for "<strong style="color:#fff;">${searchQuery}</strong>"</div>`;
+      renderRecentlyViewed();
+      return;
+    }
+    grid.innerHTML = list.map(p => buildCard(p)).join('');
+    renderRecentlyViewed();
+    return;
+  }
+  // Normal category filter
+  const filtered = cat === 'home' ? list : list.filter(p => (p.categories || [p.category]).includes(cat));
+  if (!filtered.length) { grid.innerHTML = `<div style="grid-column:1/-1;text-align:center;padding:48px 20px;color:var(--muted);font-size:.9rem;">No products in this category yet.</div>`; return; }
+  const featured = filtered.filter(p => p.featured);
+  const rest     = filtered.filter(p => !p.featured);
+  grid.innerHTML  = [...featured, ...rest].map(p => buildCard(p)).join('');
+  renderRecentlyViewed();
+}
+function openProductDetail(id) {
+  const p = allProducts.find(x => x.id === id);
+  if (!p) { showToast('Product not found'); return; }
+  addToRecentlyViewed(id);
+  _openProductDetailCore(p);
+}
+function renderAdminProductList() {
+  const el = document.getElementById('admin-product-list');
+  if (!el) return;
+  if (!allProducts.length) { el.innerHTML=`<p style="font-size:.82rem;color:var(--muted);">No products yet.</p>`; return; }
+  el.innerHTML = allProducts.map((p,i) => {
+    const sc = p.status==='live'?'pli-live':p.status==='free'?'pli-free':'pli-soon';
+    const sl = p.status==='coming_soon'?'Soon':p.status.charAt(0).toUpperCase()+p.status.slice(1);
+    return `<div class="product-list-item">
+      <span>${p.icon||'📄'}</span>
+      <span class="pli-name">${p.name}</span>
+      <span class="pli-status ${sc}">${sl}</span>
+      <div class="pli-actions">
+        <button class="admin-btn admin-btn-ghost" style="padding:5px 12px;font-size:.75rem;" onclick="editProduct(${i})">Edit</button>
+      </div>
+    </div>`;
+  }).join('');
+  renderReviewsAdmin();
+  renderDiscountRulesAdmin();
+}
+
 // ── INIT ─────────────────────────────────────────────────────
-document.getElementById('view-home').appendChild(document.getElementById('shared-footer'));
+const _sharedFooter = document.getElementById('shared-footer');
+const _homeView = document.getElementById('view-home');
+if (_sharedFooter && _homeView && !_homeView.contains(_sharedFooter)) {
+  _homeView.appendChild(_sharedFooter);
+}
 handleHash();
 </script>
 </body>
